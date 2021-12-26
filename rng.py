@@ -5,14 +5,16 @@ import json
 def sun_constelation(date):
     sun = ephem.Sun()
     sun.compute(date, epoch='1875')
-    const =  ephem.constellation(sun)
+    const = ephem.constellation(sun)
     return const, sun
+
 
 def moon_constelation(date):
     moon = ephem.Moon()
     moon.compute(date, epoch='1875')
-    const =  ephem.constellation(moon)
+    const = ephem.constellation(moon)
     return const, moon
+
 
 def replace_ophiuchus(stars_body, target_constellation):
     """
@@ -29,6 +31,7 @@ def replace_ophiuchus(stars_body, target_constellation):
     print("the star is: ", stars_body[target_constellation[0]]["name"])
     return target_constellation
 
+
 def normaliser(value):
     """
     want to end up with a number between 1 and 10000
@@ -43,10 +46,11 @@ def normaliser(value):
     value = int(value)
     return value
 
+
 def load_json(path):
     # Opening JSON file
     f = open(path)
-    
+
     # returns JSON object as
     # a dictionary
     data = json.load(f)
@@ -55,9 +59,10 @@ def load_json(path):
     f.close()
     return data
 
+
 def convert_to_fixedbody(star_json):
     """
-    from our json, wouldnt it be nice to have 
+    from our json, wouldnt it be nice to have
     actual pyephem objects?
     """
     stars_body = {}
@@ -67,14 +72,15 @@ def convert_to_fixedbody(star_json):
         st._dec = ephem.degrees(star_json[x]["dec"])
         st.compute(epoch='1875')
 
-        stars_body[x] = {"name":star_json[x]["name"], 
-                        "star body": st}
-
+        stars_body[x] = {"name": star_json[x]["name"],
+                         "star body": st}
 
     return stars_body
 
+
 stars = load_json("brightest.json")
 stars_body = convert_to_fixedbody(stars)
+
 
 def number_generator(date):
     sun_const, sun = sun_constelation(date)
@@ -99,6 +105,7 @@ def number_generator(date):
     value = normaliser(value)
 
     return value
+
 
 if __name__ == "__main__":
     date = "2021/12/24"
